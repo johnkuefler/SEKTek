@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ProjectTracker.Views.AddProjectPage"
+             Title="Add Project">
+    <ScrollView>
+        <StackLayout Padding="10">
+            <Label Text="Add Project" FontSize="40"/>
+            <Entry Placeholder="Name"
+               VerticalOptions="CenterAndExpand"
+               x:Name="NameEntry"
+               Text="{Binding Name, Mode=TwoWay}"/>
+            <Entry Placeholder="Description"
+               VerticalOptions="CenterAndExpand"
+               x:Name="DescriptionEntry"
+               Text="{Binding Description, Mode=TwoWay}"/>
+            <Entry Placeholder="Address1"
+               VerticalOptions="CenterAndExpand"
+               x:Name="Address1Entry"
+               Text="{Binding Address1, Mode=TwoWay}"/>
+            <Entry Placeholder="Address2"
+               VerticalOptions="CenterAndExpand"
+               x:Name="Address2Entry"
+               Text="{Binding Address2, Mode=TwoWay}"/>
+            <Entry Placeholder="City"
+               VerticalOptions="CenterAndExpand"
+               x:Name="CityEntry"
+               Text="{Binding City, Mode=TwoWay}"/>
+            <Entry Placeholder="State"
+               VerticalOptions="CenterAndExpand"
+               x:Name="StateEntry"
+               Text="{Binding State, Mode=TwoWay}"/>
+            <Entry Placeholder="Zip"
+               VerticalOptions="CenterAndExpand"
+               x:Name="ZipEntry"
+               Text="{Binding Zip, Mode=TwoWay}"/>
+
+            <Button Text="Save"
+                    Command="{Binding SaveProjectCommand}"/>
+            <Button Text="Cancel"
+                    Clicked="CancelButton_Clicked"/>
+        </StackLayout>
+    </ScrollView>
+</ContentPage>
