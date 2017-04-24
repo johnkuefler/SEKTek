@@ -33,15 +33,23 @@ namespace ProjectTracker.Views
             BindingContext = this.viewModel = viewModel;
         }
 
-        protected override void OnAppearing()
+        protected override async void OnAppearing()
         {
             base.OnAppearing();
 
             if (viewModel.Tasks.Count == 0)
                 viewModel.LoadProjectTasksCommand.Execute(null);
 
-            if (viewModel.Tasks.Count == 0)
-                viewModel.LoadProjectResourcesCommand.Execute(null);
+            //if (viewModel.Tasks.Count == 0)
+            //    viewModel.LoadProjectResourcesCommand.Execute(null);
+
+
+            ProjectRepository projectRepository = new ProjectRepository();
+            List<User> resources = await projectRepository.GetProjectResources(viewModel.ProjectID);
+            foreach (User resource in resources)
+            {
+                ResourcesStackLayout.Children.Add(new CircleImage { Source = resource.PictureURL, HeightRequest = 50, WidthRequest = 50 });
+            }
         }
 
         async void OnProjectTaskItemSelected(object sender, SelectedItemChangedEventArgs args)
@@ -92,12 +100,12 @@ namespace ProjectTracker.Views
         public string Color { get; set; }
 
         public ObservableCollection<ProjectTask> Tasks { get; set; }
-        public ObservableCollection<User> Resources { get; set; }
+        //public ObservableCollection<User> Resources { get; set; }
 
         ProjectRepository projectRepository;
         ProjectTaskRepository projectTaskRepository;
         public Command LoadProjectTasksCommand { get; set; }
-        public Command LoadProjectResourcesCommand { get; set; }
+        // public Command LoadProjectResourcesCommand { get; set; }
         public ProjectDetailViewModel(Project project)
         {
             projectTaskRepository = new ProjectTaskRepository();
@@ -108,11 +116,11 @@ namespace ProjectTracker.Views
             this.Color = project.Color;
             this.Description = project.Description;
             this.Tasks = new ObservableCollection<ProjectTask>();
-            this.Resources = new ObservableCollection<User>();
+            // this.Resources = new ObservableCollection<User>();
             this.PercentCompleted = project.GetCompletionPercentage();
 
             LoadProjectTasksCommand = new Command(async () => await loadProjectTasksAsync());
-            LoadProjectResourcesCommand = new Command(async () => await loadProjectResourcesAsync());
+            // LoadProjectResourcesCommand = new Command(async () => await loadProjectResourcesAsync());
         }
 
         private async Task loadProjectTasksAsync()
@@ -125,13 +133,15 @@ namespace ProjectTracker.Views
             }
         }
 
-        private async Task loadProjectResourcesAsync()
-        {
-            Resources.Clear();
-            List<User> resources = await projectRepository.GetProjectResources(this.ProjectID);
-
-            this.Resources = new ObservableCollection<User>(resources);
-        }
+        //private async Task loadProjectResourcesAsync()
+        //{
+        //    Resources.Clear();
+        //    List<User> resources = await projectRepository.GetProjectResources(this.ProjectID);
+        //    foreach (User item in resources)
+        //    {
+        //        Resources.Add(item);
+        //    }
+        //}
 
 
         public event PropertyChangedEventHandler PropertyChanged;

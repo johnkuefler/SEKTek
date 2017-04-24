@@ -35,28 +35,34 @@
                 </Grid>
             </Frame>
             <StackLayout Padding="10" Spacing="10">
-                <Label FontSize="24" Text="Resources Assigned"/>
-                <!--<ScrollView Orientation="Horizontal">
-                    <StackLayout x:Name="ResourcesStackLayout" Spacing="10"
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="50"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Label FontSize="30" Text="Resources Assigned" Grid.Row="0" Grid.Column="0"/>
+                    <Button FontSize="24" Text="+" Grid.Row="0" Grid.Column="1" Clicked="AddResourceButton_Clicked"/>
+                </Grid>
+                <ScrollView Orientation="Horizontal">
+                    <StackLayout x:Name="ResourcesStackLayout" HeightRequest="75"
                          Orientation="Horizontal">
                     </StackLayout>
-                </ScrollView>-->
+                </ScrollView>
 
-                    <!--<CarouselView ItemsSource="{Binding Resources}">
-                        <CarouselView.ItemTemplate>
-                            <DataTemplate>
-                                <controls:CircleImage 
-                                    Source="{Binding PictureURL}" 
-                                    Aspect="AspectFill">
-                                </controls:CircleImage>
-                            </DataTemplate>
-                        </CarouselView.ItemTemplate>
-                    </CarouselView>-->
-
-                <Button Text="Add Resource"
-                    Clicked="AddResourceButton_Clicked"/>
-
-                <Label FontSize="24" Text="Project Tasks"/>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="50"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Label FontSize="30" Text="Project Tasks" Grid.Row="0" Grid.Column="0"/>
+                    <Button FontSize="24" Text="+" Grid.Row="0" Grid.Column="1" Clicked="AddTaskButton_Clicked"/>
+                </Grid>
                 <ListView
                 x:Name="ProjectTasksListView"
                 HeightRequest="200"
@@ -72,20 +78,30 @@
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
-                                <StackLayout Padding="15,10" HorizontalOptions="FillAndExpand">
-                                    <Label VerticalOptions="FillAndExpand" 
-                                   VerticalTextAlignment="Center" 
-                                   Text="{Binding Name }" 
-                                   FontSize="24"/>
+                                <StackLayout HorizontalOptions="FillAndExpand">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*" />
+                                            <RowDefinition Height="*" />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="100" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <Label Text="{Binding PercentCompleteDisplay}" FontSize="32" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2"/>
+
+                                        <Label Text="{Binding Name}" FontSize="24" Grid.Row="0" Grid.Column="1" />
+                                        <Label Text="Last comment" FontSize="16" Grid.Row="1" Grid.Column="1" />
+
+                                    </Grid>
+
                                 </StackLayout>
+                             
                             </ViewCell>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
-
-                <Button
-                Text="Add Task"
-                Clicked="AddTaskButton_Clicked"/>
             </StackLayout>
         </StackLayout>
 

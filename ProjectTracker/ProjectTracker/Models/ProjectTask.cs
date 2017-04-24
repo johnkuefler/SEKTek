@@ -11,6 +11,12 @@ namespace ProjectTracker.Models
         public string ProjectID { get; set; }
 
         public decimal PercentComplete { get; set; }
+        public string PercentCompleteDisplay
+        {
+            get
+            { return PercentComplete + "%"; }
+        }
+
         public string Name { get; set; }
         public string Description { get; set; }
 

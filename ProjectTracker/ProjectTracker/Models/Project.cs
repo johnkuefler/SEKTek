@@ -19,7 +19,13 @@ namespace ProjectTracker.Models
 
         public decimal Latitude { get; set; }
         public decimal Longitude { get; set; }
-
+        public string PercentComplete
+        {
+            get
+            {
+                return GetCompletionPercentage();
+            }
+        }
 
         private List<User> _resources;
         public List<User> Resources

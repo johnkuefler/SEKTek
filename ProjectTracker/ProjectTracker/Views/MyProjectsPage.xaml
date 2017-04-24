@@ -18,19 +18,37 @@
                 IsPullToRefreshEnabled="true"
                 ItemsSource="{Binding Projects}"
                 ItemSelected="OnItemSelected">
-                
-                
+
+
                 <ListView.ItemTemplate>
-                <DataTemplate>
-                    <ViewCell>
-                        <StackLayout Padding="15,10" HorizontalOptions="FillAndExpand">
-                            <Label VerticalOptions="FillAndExpand" 
-                                   VerticalTextAlignment="Center" 
-                                   Text="{Binding Name}" 
-                                   FontSize="24"/>
-                        </StackLayout>
-                    </ViewCell>
-                </DataTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout HorizontalOptions="FillAndExpand" Padding="5">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="100" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <Frame
+                                        BackgroundColor="{Binding Color}" 
+                                        Grid.Row="0"
+                                        Grid.Column="0"
+                                        Padding="5">
+
+                                        <Label TextColor="White" Text="{Binding PercentComplete}" FontSize="30" Grid.Row="0" Grid.Column="0"/>
+                                    </Frame>
+
+                                    <Label Text="{Binding Name}" FontSize="28" Grid.Row="0" Grid.Column="1" />
+
+                                </Grid>
+
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
 
