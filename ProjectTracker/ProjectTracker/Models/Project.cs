@@ -8,6 +8,7 @@ namespace ProjectTracker.Models
 {
     public class Project : BaseDataObject
     {
+        public string Color { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public string Address1 { get; set; }
@@ -32,6 +33,12 @@ namespace ProjectTracker.Models
         {
             get
             { return _tasks; }
+        }
+
+
+        public string GetCompletionPercentage()
+        {
+            return "0%";
         }
 
     }

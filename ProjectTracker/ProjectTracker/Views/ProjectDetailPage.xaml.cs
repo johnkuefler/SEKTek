@@ -1,4 +1,5 @@
-﻿using ProjectTracker.Models;
+﻿using ImageCircle.Forms.Plugin.Abstractions;
+using ProjectTracker.Models;
 using ProjectTracker.Services;
 using System;
 using System.Collections.Generic;
@@ -38,16 +39,35 @@ namespace ProjectTracker.Views
 
             if (viewModel.Tasks.Count == 0)
                 viewModel.LoadProjectTasksCommand.Execute(null);
+
+            if (viewModel.Tasks.Count == 0)
+                viewModel.LoadProjectResourcesCommand.Execute(null);
         }
 
-        async void OnItemSelected(object sender, SelectedItemChangedEventArgs args)
+        async void OnProjectTaskItemSelected(object sender, SelectedItemChangedEventArgs args)
         {
-            Project project = args.SelectedItem as Project;
-            if (project == null)
+            ProjectTask projectTask = args.SelectedItem as ProjectTask;
+            if (projectTask == null)
                 return;
 
             // Manually deselect item
-            ProjectsListView.SelectedItem = null;
+            ProjectTasksListView.SelectedItem = null;
+
+
+            // Load task detail page
+        }
+
+        async void OnProjectResourceItemSelected(object sender, SelectedItemChangedEventArgs args)
+        {
+            User resource = args.SelectedItem as User;
+            if (resource == null)
+                return;
+
+            // Manually deselect item
+            ProjectTasksListView.SelectedItem = null;
+
+
+            // Load users task page
         }
 
         private async Task AddTaskButton_Clicked(object sender, EventArgs e)
@@ -55,6 +75,11 @@ namespace ProjectTracker.Views
             AddProjectTaskViewModel addTaskViewModel = new AddProjectTaskViewModel();
             addTaskViewModel.ProjectID = viewModel.ProjectID;
             await Navigation.PushAsync(new AddProjectTaskPage(addTaskViewModel));
+        }
+
+        private async Task AddResourceButton_Clicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new FindResourcesPage(viewModel.ProjectID));
         }
     }
 
@@ -64,23 +89,30 @@ namespace ProjectTracker.Views
         public string Name { get; set; }
         public string Description { get; set; }
         public string PercentCompleted { get; set; }
+        public string Color { get; set; }
 
         public ObservableCollection<ProjectTask> Tasks { get; set; }
+        public ObservableCollection<User> Resources { get; set; }
 
         ProjectRepository projectRepository;
         ProjectTaskRepository projectTaskRepository;
         public Command LoadProjectTasksCommand { get; set; }
-
+        public Command LoadProjectResourcesCommand { get; set; }
         public ProjectDetailViewModel(Project project)
         {
             projectTaskRepository = new ProjectTaskRepository();
+            projectRepository = new ProjectRepository();
 
             this.ProjectID = project.Id;
             this.Name = project.Name;
+            this.Color = project.Color;
             this.Description = project.Description;
             this.Tasks = new ObservableCollection<ProjectTask>();
+            this.Resources = new ObservableCollection<User>();
+            this.PercentCompleted = project.GetCompletionPercentage();
 
             LoadProjectTasksCommand = new Command(async () => await loadProjectTasksAsync());
+            LoadProjectResourcesCommand = new Command(async () => await loadProjectResourcesAsync());
         }
 
         private async Task loadProjectTasksAsync()
@@ -91,6 +123,14 @@ namespace ProjectTracker.Views
             {
                 Tasks.Add(item);
             }
+        }
+
+        private async Task loadProjectResourcesAsync()
+        {
+            Resources.Clear();
+            List<User> resources = await projectRepository.GetProjectResources(this.ProjectID);
+
+            this.Resources = new ObservableCollection<User>(resources);
         }
 
 

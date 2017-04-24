@@ -1,44 +1,94 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin.Abstractions"
              x:Class="ProjectTracker.Views.ProjectDetailPage"
              Title="Project Details">
     <ScrollView>
-        <StackLayout Padding="10">
-            <Label Text="{Binding Name}" FontSize="40"/>
-            <Label Text="{Binding Description}"/>
-            <Label Text="{Binding PercentComplete}"/>
 
-            <ListView
-                x:Name="ProjectsListView"
+        <StackLayout Spacing="10">
+            <Frame BackgroundColor="{Binding Color}}">
+                <Grid ColumnSpacing="5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Grid ColumnSpacing="5" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="50" />
+                        </Grid.ColumnDefinitions>
+                        <Label TextColor="White" Text="{Binding Name}" FontSize="30" Grid.Row="0" Grid.Column="0"/>
+                        <Image Source="mapicon.png" HeightRequest="10" WidthRequest="10" Grid.Row="0" Grid.Column="1"/>
+                    </Grid>
+
+                    <Label Text="{Binding PercentCompleted}" FontSize="48" TextColor="White" Grid.Row="1" Grid.Column="0" />
+                    <Label Text="{Binding Description}" FontSize="18" TextColor="White" Grid.Row="1" Grid.Column="1" />
+                </Grid>
+            </Frame>
+            <StackLayout Padding="10" Spacing="10">
+                <Label FontSize="24" Text="Resources Assigned"/>
+                <!--<ScrollView Orientation="Horizontal">
+                    <StackLayout x:Name="ResourcesStackLayout" Spacing="10"
+                         Orientation="Horizontal">
+                    </StackLayout>
+                </ScrollView>-->
+
+                    <!--<CarouselView ItemsSource="{Binding Resources}">
+                        <CarouselView.ItemTemplate>
+                            <DataTemplate>
+                                <controls:CircleImage 
+                                    Source="{Binding PictureURL}" 
+                                    Aspect="AspectFill">
+                                </controls:CircleImage>
+                            </DataTemplate>
+                        </CarouselView.ItemTemplate>
+                    </CarouselView>-->
+
+                <Button Text="Add Resource"
+                    Clicked="AddResourceButton_Clicked"/>
+
+                <Label FontSize="24" Text="Project Tasks"/>
+                <ListView
+                x:Name="ProjectTasksListView"
+                HeightRequest="200"
                 SeparatorColor="Blue"
                 HasUnevenRows="True"
-                VerticalOptions="CenterAndExpand"
                 HorizontalOptions="CenterAndExpand"
                 RefreshCommand="{Binding LoadProjectTasksCommand}"
                 IsPullToRefreshEnabled="true"
                 ItemsSource="{Binding Tasks}"
-                ItemSelected="OnItemSelected">
+                ItemSelected="OnProjectTaskItemSelected">
 
 
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <StackLayout Padding="15,10" HorizontalOptions="FillAndExpand">
-                                <Label VerticalOptions="FillAndExpand" 
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <StackLayout Padding="15,10" HorizontalOptions="FillAndExpand">
+                                    <Label VerticalOptions="FillAndExpand" 
                                    VerticalTextAlignment="Center" 
                                    Text="{Binding Name }" 
                                    FontSize="24"/>
-                            </StackLayout>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+                                </StackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
 
-            <Button
+                <Button
                 Text="Add Task"
                 Clicked="AddTaskButton_Clicked"/>
+            </StackLayout>
         </StackLayout>
+
 
     </ScrollView>
 </ContentPage>

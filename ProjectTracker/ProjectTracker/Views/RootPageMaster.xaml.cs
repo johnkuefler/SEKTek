@@ -28,9 +28,17 @@ namespace ProjectTracker
 
         class RootPageMasterViewModel : INotifyPropertyChanged
         {
+            public string UserFullName { get; set; }
+            public string UserEmail { get; set; }
+            public string UserImageURL { get; set; }
+
             public ObservableCollection<RootPageMenuItem> MenuItems { get; }
             public RootPageMasterViewModel()
             {
+                UserFullName = GlobalConfig.CurrentUser.FullName;
+                UserEmail = GlobalConfig.CurrentUser.EmailAddress;
+                UserImageURL = GlobalConfig.CurrentUser.PictureURL;
+
                 MenuItems = new ObservableCollection<RootPageMenuItem>(new[]
                 {
                     new RootPageMenuItem { Title = "My Projects", TargetType = typeof(MyProjectsPage) },

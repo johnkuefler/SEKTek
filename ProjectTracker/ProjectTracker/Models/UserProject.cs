@@ -11,11 +11,4 @@ namespace ProjectTracker.Models
         public string UserID { get; set; }
         public string ProjectID { get; set; }
     }
-
-    public class UserProjectTask : BaseDataObject
-    {
-        public string UserID { get; set; }
-        public string ProjectTaskID { get; set; }
-
-    }
 }

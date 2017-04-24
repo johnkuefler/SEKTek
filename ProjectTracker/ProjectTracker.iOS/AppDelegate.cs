@@ -1,5 +1,6 @@
 ﻿
 using Foundation;
+using ImageCircle.Forms.Plugin.iOS;
 using UIKit;
 
 namespace ProjectTracker.iOS
@@ -10,7 +11,9 @@ namespace ProjectTracker.iOS
 		public override bool FinishedLaunching(UIApplication app, NSDictionary options)
 		{
 			global::Xamarin.Forms.Forms.Init();
-			LoadApplication(new App());
+            ImageCircleRenderer.Init();
+
+            LoadApplication(new App());
 
 			return base.FinishedLaunching(app, options);
 		}

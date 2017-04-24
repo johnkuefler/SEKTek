@@ -20,7 +20,7 @@ namespace ProjectTracker.Services
             await GlobalConfig.MobileService.GetTable<ProjectTask>().DeleteAsync(item);
         }
 
-        public async Task<ProjectTask> Get(string id)
+        public async Task<ProjectTask> Find(string id)
         {
             return await GlobalConfig.MobileService.GetTable<ProjectTask>().LookupAsync(id);
         }
