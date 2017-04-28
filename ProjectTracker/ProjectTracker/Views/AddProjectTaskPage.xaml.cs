@@ -42,6 +42,7 @@ namespace ProjectTracker.Views
         public string ProjectID { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public DateTime DueDate { get; set; }
         public List<User> Resources { get; set; }
 
         ProjectTaskRepository projectTaskRepository;
@@ -62,6 +63,7 @@ namespace ProjectTracker.Views
                 Name = this.Name,
                 Description = this.Description,
                 PercentComplete = 0,
+                DueDate = DueDate,
                 ProjectID = this.ProjectID
             };
 

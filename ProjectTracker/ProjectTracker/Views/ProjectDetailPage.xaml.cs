@@ -46,6 +46,9 @@ namespace ProjectTracker.Views
 
             ProjectRepository projectRepository = new ProjectRepository();
             List<User> resources = await projectRepository.GetProjectResources(viewModel.ProjectID);
+
+            ResourcesStackLayout.Children.Clear();
+
             foreach (User resource in resources)
             {
                 ResourcesStackLayout.Children.Add(new CircleImage { Source = resource.PictureURL, HeightRequest = 50, WidthRequest = 50 });
@@ -63,6 +66,7 @@ namespace ProjectTracker.Views
 
 
             // Load task detail page
+            await Navigation.PushAsync(new TaskDetailPage(projectTask));
         }
 
         async void OnProjectResourceItemSelected(object sender, SelectedItemChangedEventArgs args)
@@ -127,6 +131,7 @@ namespace ProjectTracker.Views
         {
             Tasks.Clear();
             IEnumerable<ProjectTask> items = await projectTaskRepository.GetByCriteria(rec => rec.ProjectID == this.ProjectID);
+
             foreach (ProjectTask item in items)
             {
                 Tasks.Add(item);

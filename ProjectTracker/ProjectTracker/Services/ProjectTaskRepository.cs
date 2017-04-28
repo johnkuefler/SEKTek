@@ -29,5 +29,60 @@ namespace ProjectTracker.Services
         {
             return await GlobalConfig.MobileService.GetTable<ProjectTask>().Where(predicate).ToListAsync();
         }
+
+        public async Task<List<User>> GetAssignedResources(string taskID)
+        {
+            UserRepository userRepository = new UserRepository();
+
+            List<User> output = new List<User>();
+
+            List<ProjectTaskAssignment> assignments = await GlobalConfig.MobileService.GetTable<ProjectTaskAssignment>().Where(rec => rec.ProjectTaskID == taskID).ToListAsync();
+
+            foreach (ProjectTaskAssignment assignment in assignments)
+            {
+                output.Add(await userRepository.Find(assignment.UserID));
+            }
+
+            return output;
+        }
+
+        public async Task AddTaskResource(string taskID, string userID)
+        {
+            ProjectTaskAssignment assignment = new ProjectTaskAssignment
+            {
+                ProjectTaskID = taskID,
+                UserID = userID
+            };
+
+            await GlobalConfig.MobileService.GetTable<ProjectTaskAssignment>().InsertAsync(assignment);
+        }
+
+        public async Task<List<ProjectTaskComment>> GetComments(string taskID)
+        {
+            TaskCommentRepository commentRepository = new TaskCommentRepository();
+            UserRepository userRepository = new UserRepository();
+
+            List<ProjectTaskComment> comments = await GlobalConfig.MobileService.GetTable<ProjectTaskComment>().Where(rec => rec.ProjectTaskID == taskID).ToListAsync();
+
+            foreach (ProjectTaskComment comment in comments)
+            {
+                comment.LoadUser(await userRepository.Find(comment.UserID));
+            }
+
+            return comments;
+        }
+
+        public async Task AddTaskComment(string userID, string taskID, string comment)
+        {
+            ProjectTaskComment newComment = new ProjectTaskComment
+            {
+                ProjectTaskID = taskID,
+                UserID = userID,
+                Comment = comment,
+                DateTime = DateTime.Now,
+            };
+
+            await GlobalConfig.MobileService.GetTable<ProjectTaskComment>().InsertAsync(newComment);
+        }
     }
 }

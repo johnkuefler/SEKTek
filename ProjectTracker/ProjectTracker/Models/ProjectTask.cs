@@ -14,11 +14,13 @@ namespace ProjectTracker.Models
         public string PercentCompleteDisplay
         {
             get
-            { return PercentComplete + "%"; }
+            {
+                return PercentComplete + "%";
+            }
         }
-
         public string Name { get; set; }
         public string Description { get; set; }
+        public DateTime DueDate { get; set; }
 
         private List<User> _resources;
         public List<User> Resources

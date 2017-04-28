@@ -11,5 +11,20 @@ namespace ProjectTracker.Models
         public string ProjectTaskID { get; set; }
         public string UserID { get; set; }
         public string Comment { get; set; }
+        public DateTime DateTime { get; set; }
+
+
+        private User user;
+
+
+        public void LoadUser(User u)
+        {
+            this.user = u;
+        }
+
+        public User GetUser()
+        {
+            return user;
+        }
     }
 }
