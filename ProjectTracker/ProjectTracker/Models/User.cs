@@ -20,5 +20,17 @@ namespace ProjectTracker.Models
         public string EmailAddress { get; set; }
         public string Skills { get; set; }
         public string Password { get; set; }
+
+        public string GetRole()
+        {
+            if (FirstName == "Jackson")
+            {
+                return "Admin";
+            }
+            else
+            {
+                return "User";
+            }
+        }
     }
 }

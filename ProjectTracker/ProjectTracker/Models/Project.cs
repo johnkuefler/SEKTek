@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ProjectTracker.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,16 +17,10 @@ namespace ProjectTracker.Models
         public string City { get; set; }
         public string State { get; set; }
         public string Zip { get; set; }
-
+        public string PercentComplete { get; set; }
         public decimal Latitude { get; set; }
         public decimal Longitude { get; set; }
-        public string PercentComplete
-        {
-            get
-            {
-                return GetCompletionPercentage();
-            }
-        }
+
 
         private List<User> _resources;
         public List<User> Resources
@@ -42,9 +37,20 @@ namespace ProjectTracker.Models
         }
 
 
-        public string GetCompletionPercentage()
+        public async Task GetCompletionPercentage()
         {
-            return "0%";
+           
+            ProjectTaskRepository repository = new ProjectTaskRepository();
+            IEnumerable<ProjectTask> tasks = await repository.GetByCriteria(x => x.ProjectID == this.Id);
+
+            if (tasks.Count() > 0)
+            {
+                this.PercentComplete = Math.Round(tasks.Sum(x => x.PercentComplete) / tasks.Count()) + "%";
+            }
+            else
+            {
+                this.PercentComplete = "0%";
+            }
         }
 
     }

@@ -12,7 +12,7 @@
 
             <ListView
                 x:Name="SearchResultsListView"
-                SeparatorVisibility="None"
+                SeparatorVisibility="Default"
                 VerticalOptions="CenterAndExpand"
                 HorizontalOptions="CenterAndExpand"
                 HasUnevenRows="True"
@@ -24,7 +24,7 @@
                     <DataTemplate>
                         <ViewCell>
                             <StackLayout HorizontalOptions="FillAndExpand">
-                                <Grid>
+                                <Grid Padding="0,10,0,10">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="*" />
                                         <RowDefinition Height="*" />

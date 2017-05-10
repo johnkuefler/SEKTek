@@ -35,6 +35,12 @@ namespace ProjectTracker.Views
         {
             await Navigation.PopAsync();
         }
+
+        private async Task AddTaskButton_Clicked(object sender, EventArgs e)
+        {
+            await viewModel.SaveProjectTaskAsync();
+            await Navigation.PopAsync();
+        }
     }
 
     public class AddProjectTaskViewModel : INotifyPropertyChanged
@@ -47,16 +53,14 @@ namespace ProjectTracker.Views
 
         ProjectTaskRepository projectTaskRepository;
 
-        public ICommand AddProjectTaskCommand { get; set; }
-
         public AddProjectTaskViewModel()
         {
             projectTaskRepository = new ProjectTaskRepository();
 
-            AddProjectTaskCommand = new Command(async () => await saveProjectTaskAsync());
+            DueDate = DateTime.Today;
         }
 
-        private async Task saveProjectTaskAsync()
+        public async Task SaveProjectTaskAsync()
         {
             ProjectTask projectTask = new ProjectTask
             {
@@ -68,8 +72,6 @@ namespace ProjectTracker.Views
             };
 
             await projectTaskRepository.Add(projectTask);
-
-            App.Current.MainPage = new RootPage();
         }
 
 

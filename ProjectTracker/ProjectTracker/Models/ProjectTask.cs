@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ProjectTracker.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,11 +23,10 @@ namespace ProjectTracker.Models
         public string Description { get; set; }
         public DateTime DueDate { get; set; }
 
-        private List<User> _resources;
-        public List<User> Resources
-        {
-            get
-            { return _resources; }
+        public string DueDateDisplay { get
+            {
+                return "Due: " + DueDate.ToString("MM-dd-yyyy");
+            }
         }
     }
 }

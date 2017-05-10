@@ -37,12 +37,13 @@ namespace ProjectTracker.Views
         {
             base.OnAppearing();
 
-            if (viewModel.Tasks.Count == 0)
-                viewModel.LoadProjectTasksCommand.Execute(null);
+            if (GlobalConfig.CurrentUser.GetRole() != "Admin")
+            {
+                addResourceBtn.IsVisible = false;
+                addTaskBtn.IsVisible = false;
+            }
 
-            //if (viewModel.Tasks.Count == 0)
-            //    viewModel.LoadProjectResourcesCommand.Execute(null);
-
+            await viewModel.LoadProjectTasksAsync();
 
             ProjectRepository projectRepository = new ProjectRepository();
             List<User> resources = await projectRepository.GetProjectResources(viewModel.ProjectID);
@@ -53,6 +54,8 @@ namespace ProjectTracker.Views
             {
                 ResourcesStackLayout.Children.Add(new CircleImage { Source = resource.PictureURL, HeightRequest = 50, WidthRequest = 50 });
             }
+
+            this.percentCompletedLabel.Text = viewModel.PercentCompleted;
         }
 
         async void OnProjectTaskItemSelected(object sender, SelectedItemChangedEventArgs args)
@@ -66,7 +69,7 @@ namespace ProjectTracker.Views
 
 
             // Load task detail page
-            await Navigation.PushAsync(new TaskDetailPage(projectTask));
+            await Navigation.PushAsync(new TaskDetailPage(projectTask, viewModel.Color));
         }
 
         async void OnProjectResourceItemSelected(object sender, SelectedItemChangedEventArgs args)
@@ -93,10 +96,27 @@ namespace ProjectTracker.Views
         {
             await Navigation.PushAsync(new FindResourcesPage(viewModel.ProjectID));
         }
+
+        private void FavoriteIcon_Tapped(object sender, EventArgs e)
+        {
+            if (!GlobalConfig.HomeScreenProjects.Any(x => x.Id == viewModel.Project.Id))
+            {
+                GlobalConfig.HomeScreenProjects.Add(viewModel.Project);
+            }
+
+            DisplayAlert("Favorite Added", "Project added to favorites", "Ok");
+        }
+
+        private async void MapIcon_Tapped(object sender, EventArgs e)
+        {
+            GlobalConfig.MapProject = viewModel.Project;
+            await Navigation.PushAsync(new ProjectsMapPage());
+        }
     }
 
     public class ProjectDetailViewModel : INotifyPropertyChanged
     {
+        public Project Project;
         public string ProjectID { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
@@ -104,14 +124,13 @@ namespace ProjectTracker.Views
         public string Color { get; set; }
 
         public ObservableCollection<ProjectTask> Tasks { get; set; }
-        //public ObservableCollection<User> Resources { get; set; }
 
         ProjectRepository projectRepository;
         ProjectTaskRepository projectTaskRepository;
         public Command LoadProjectTasksCommand { get; set; }
-        // public Command LoadProjectResourcesCommand { get; set; }
         public ProjectDetailViewModel(Project project)
         {
+            this.Project = project;
             projectTaskRepository = new ProjectTaskRepository();
             projectRepository = new ProjectRepository();
 
@@ -120,33 +139,34 @@ namespace ProjectTracker.Views
             this.Color = project.Color;
             this.Description = project.Description;
             this.Tasks = new ObservableCollection<ProjectTask>();
-            // this.Resources = new ObservableCollection<User>();
-            this.PercentCompleted = project.GetCompletionPercentage();
-
-            LoadProjectTasksCommand = new Command(async () => await loadProjectTasksAsync());
-            // LoadProjectResourcesCommand = new Command(async () => await loadProjectResourcesAsync());
+            LoadProjectTasksCommand = new Command(async () => await LoadProjectTasksAsync());
         }
 
-        private async Task loadProjectTasksAsync()
+        public async Task LoadProjectTasksAsync()
         {
             Tasks.Clear();
             IEnumerable<ProjectTask> items = await projectTaskRepository.GetByCriteria(rec => rec.ProjectID == this.ProjectID);
 
-            foreach (ProjectTask item in items)
-            {
-                Tasks.Add(item);
-            }
-        }
+            List<ProjectTaskAssignment> assignments = await projectTaskRepository.GetTaskAssignmentsForUser(GlobalConfig.CurrentUser.Id);
 
-        //private async Task loadProjectResourcesAsync()
-        //{
-        //    Resources.Clear();
-        //    List<User> resources = await projectRepository.GetProjectResources(this.ProjectID);
-        //    foreach (User item in resources)
-        //    {
-        //        Resources.Add(item);
-        //    }
-        //}
+            foreach (ProjectTask item in items.OrderBy(x => x.DueDate))
+            {
+                if (GlobalConfig.CurrentUser.GetRole() == "Admin")
+                {
+                    Tasks.Add(item);
+                }
+                else
+                {
+                    if (assignments.Any(x=>x.ProjectTaskID == item.Id))
+                    {
+                        Tasks.Add(item);
+                    }
+                }
+            }
+
+            await Project.GetCompletionPercentage();
+            this.PercentCompleted = Project.PercentComplete;
+        }
 
 
         public event PropertyChangedEventHandler PropertyChanged;

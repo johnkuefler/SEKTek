@@ -41,17 +41,22 @@ namespace ProjectTracker
 
                 MenuItems = new ObservableCollection<RootPageMenuItem>(new[]
                 {
+                    new RootPageMenuItem { Title = "Home", TargetType = typeof(RootPageDetail) },
                     new RootPageMenuItem { Title = "My Projects", TargetType = typeof(MyProjectsPage) },
                     new RootPageMenuItem { Title = "Project Map", TargetType = typeof(ProjectsMapPage) },
-                    new RootPageMenuItem { Title = "Admin", TargetType = typeof(AdminPage) },
-                    new RootPageMenuItem { Title = "Sign Out", TargetType = typeof(SignOutPage) },
                 });
+
+                if (GlobalConfig.CurrentUser.GetRole() == "Admin")
+                {
+                    MenuItems.Add(new RootPageMenuItem { Title = "New Project", TargetType = typeof(AddProjectPage) });
+                }
+
+                MenuItems.Add(new RootPageMenuItem { Title = "Sign Out", TargetType = typeof(LogoutPage) });
+
             }
             public event PropertyChangedEventHandler PropertyChanged;
             void OnPropertyChanged([CallerMemberName]string propertyName = "") =>
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-
-
         }
     }
 }

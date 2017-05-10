@@ -19,10 +19,11 @@
             <Editor
                VerticalOptions="CenterAndExpand"
                x:Name="DescriptionEntry"
+                HeightRequest="150"
                Text="{Binding Description, Mode=TwoWay}"/>
 
 
-            <Button Text="Save" Command="{Binding AddProjectTaskCommand}"/>
+            <Button Text="Save" Clicked="AddTaskButton_Clicked"/>
             <Button Text="Cancel" Clicked="CancelButton_Clicked"/>
         </StackLayout>
     </ScrollView>

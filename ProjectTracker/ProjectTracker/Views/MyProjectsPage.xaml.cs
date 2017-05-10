@@ -79,9 +79,20 @@ namespace ProjectTracker.Views
             try
             {
                 Projects.Clear();
-                IEnumerable<Project> items = await projectRepository.GetByCriteria(rec => true);
-                foreach (Project item in items)
+                IEnumerable<Project> items = new List<Project>();
+
+                if (GlobalConfig.CurrentUser.GetRole() == "Admin")
                 {
+                   items = await projectRepository.GetByCriteria(rec => true);
+                }
+                else
+                {
+                    items = await projectRepository.GetProjectsForUser(GlobalConfig.CurrentUser);
+                }
+
+                foreach (Project item in items)
+                {                 
+                    await item.GetCompletionPercentage();
                     Projects.Add(item);
                 }
             }

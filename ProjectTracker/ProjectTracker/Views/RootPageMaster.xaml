@@ -37,22 +37,21 @@
                             Grid.Row="0"
                             Grid.Column="0"
                             Grid.RowSpan="2"
-                            BorderColor="White"
                             BorderThickness="2"
                             Source="{Binding UserImageURL}" 
                             Aspect="AspectFill">
                         </controls:CircleImage>
 
                         <Label Text="{Binding UserFullName}"
-                               TextColor="White"
                                FontSize="24"
                                Grid.Row="0"
+                               TextColor="White"
                                Grid.Column="1"/>
 
                         <Label Text="{Binding UserEmail}"
-                               TextColor="White"
                                FontSize="18"
                                Grid.Row="1"
+                               TextColor="White"
                                Grid.Column="1"/>
                     </Grid>
                 </Grid>

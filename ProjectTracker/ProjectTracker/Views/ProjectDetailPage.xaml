@@ -20,17 +20,33 @@
 
                     <Grid ColumnSpacing="5" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2">
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="*" />
+                            <RowDefinition Height="50" />
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="50" />
+                            <ColumnDefinition Width="40" />
+                            <ColumnDefinition Width="40" />
                         </Grid.ColumnDefinitions>
                         <Label TextColor="White" Text="{Binding Name}" FontSize="30" Grid.Row="0" Grid.Column="0"/>
-                        <Image Source="mapicon.png" HeightRequest="10" WidthRequest="10" Grid.Row="0" Grid.Column="1"/>
+                        
+                        <Image Source="mapicon.png" HeightRequest="50" WidthRequest="50" Grid.Row="0" Grid.Column="1">
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer
+                                Tapped="MapIcon_Tapped"
+                                NumberOfTapsRequired="1" />
+                            </Image.GestureRecognizers>
+                        </Image>
+
+                        <Image Source="favoritefull.png" HeightRequest="50" WidthRequest="50" Grid.Row="0" Grid.Column="2">
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer
+                                Tapped="FavoriteIcon_Tapped"
+                                NumberOfTapsRequired="1" />
+                            </Image.GestureRecognizers>
+                        </Image>
                     </Grid>
 
-                    <Label Text="{Binding PercentCompleted}" FontSize="48" TextColor="White" Grid.Row="1" Grid.Column="0" />
+                    <Label x:Name="percentCompletedLabel" Text="{Binding PercentCompleted}" FontSize="48" TextColor="White" Grid.Row="1" Grid.Column="0" />
                     <Label Text="{Binding Description}" FontSize="18" TextColor="White" Grid.Row="1" Grid.Column="1" />
                 </Grid>
             </Frame>
@@ -44,10 +60,18 @@
                         <ColumnDefinition Width="50"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
                     <Label FontSize="30" Text="Resources Assigned" Grid.Row="0" Grid.Column="0"/>
-                    <Button FontSize="24" Text="+" Grid.Row="0" Grid.Column="1" Clicked="AddResourceButton_Clicked"/>
+
+                    <Image x:Name="addResourceBtn" Source="add.png" WidthRequest="40" HeightRequest="40" Grid.Row="0" Grid.Column="1">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer
+                            Tapped="AddResourceButton_Clicked"
+                            NumberOfTapsRequired="1" />
+                        </Image.GestureRecognizers>
+                    </Image>
+                    
                 </Grid>
                 <ScrollView Orientation="Horizontal">
-                    <StackLayout x:Name="ResourcesStackLayout" HeightRequest="75"
+                    <StackLayout x:Name="ResourcesStackLayout" HeightRequest="100"
                          Orientation="Horizontal">
                     </StackLayout>
                 </ScrollView>
@@ -61,12 +85,20 @@
                         <ColumnDefinition Width="50"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
                     <Label FontSize="30" Text="Project Tasks" Grid.Row="0" Grid.Column="0"/>
-                    <Button FontSize="24" Text="+" Grid.Row="0" Grid.Column="1" Clicked="AddTaskButton_Clicked"/>
+
+                    <Image x:Name="addTaskBtn" Source="add.png" WidthRequest="40" HeightRequest="40" Grid.Row="0" Grid.Column="1">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer
+                            Tapped="AddTaskButton_Clicked"
+                            NumberOfTapsRequired="1" />
+                        </Image.GestureRecognizers>
+                    </Image>
+
                 </Grid>
                 <ListView
                 x:Name="ProjectTasksListView"
                 HeightRequest="200"
-                SeparatorColor="Blue"
+                SeparatorVisibility="Default"
                 HasUnevenRows="True"
                 HorizontalOptions="CenterAndExpand"
                 RefreshCommand="{Binding LoadProjectTasksCommand}"
@@ -92,12 +124,12 @@
                                         <Label Text="{Binding PercentCompleteDisplay}" FontSize="32" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2"/>
 
                                         <Label Text="{Binding Name}" FontSize="24" Grid.Row="0" Grid.Column="1" />
-                                        <Label Text="Last comment" FontSize="16" Grid.Row="1" Grid.Column="1" />
+                                        <Label Text="{Binding DueDateDisplay}}" FontSize="16" Grid.Row="1" Grid.Column="1" />
 
                                     </Grid>
 
                                 </StackLayout>
-                             
+
                             </ViewCell>
                         </DataTemplate>
                     </ListView.ItemTemplate>

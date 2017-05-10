@@ -15,6 +15,11 @@ namespace ProjectTracker.Services
             await GlobalConfig.MobileService.GetTable<ProjectTask>().InsertAsync(item);
         }
 
+        public async Task Update(ProjectTask item)
+        {
+            await GlobalConfig.MobileService.GetTable<ProjectTask>().UpdateAsync(item);
+        }
+
         public async Task Delete(ProjectTask item)
         {
             await GlobalConfig.MobileService.GetTable<ProjectTask>().DeleteAsync(item);
@@ -44,6 +49,12 @@ namespace ProjectTracker.Services
             }
 
             return output;
+        }
+
+
+        public async Task<List<ProjectTaskAssignment>> GetTaskAssignmentsForUser(string userID)
+        {
+            return await GlobalConfig.MobileService.GetTable<ProjectTaskAssignment>().Where(rec => rec.UserID == userID).ToListAsync();
         }
 
         public async Task AddTaskResource(string taskID, string userID)

@@ -31,6 +31,22 @@ namespace ProjectTracker.Services
         }
 
 
+        public async Task<IEnumerable<Project>> GetProjectsForUser(User u)
+        {
+            List<UserProject> projectAssignments = await GlobalConfig.MobileService.GetTable<UserProject>().Where(rec=>rec.UserID == u.Id).ToListAsync();
+
+            List<Project> output = new List<Project>();
+
+            ProjectRepository repository = new ProjectRepository();
+            foreach (UserProject up in projectAssignments)
+            {
+                Project p = await repository.Find(up.ProjectID);
+                output.Add(p);
+            }
+
+            return output;
+        }
+
         public async Task<List<User>> GetProjectResources(string projectID)
         {
             UserRepository userRepository = new UserRepository();

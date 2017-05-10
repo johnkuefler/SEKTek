@@ -38,10 +38,12 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Exceptions\InvalidAddressException.cs" />
     <Compile Include="GlobalConfig.cs" />
     <Compile Include="Helpers\MessengingCenterAlert.cs" />
     <Compile Include="Helpers\ObservableObject.cs" />
     <Compile Include="Helpers\ObservableRangeCollection.cs" />
+    <Compile Include="Models\AddressHelpers.cs" />
     <Compile Include="Models\BaseDataObject.cs" />
     <Compile Include="Models\Item.cs" />
     <Compile Include="Models\Project.cs" />
@@ -51,11 +53,16 @@
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserProject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\AddressService.cs" />
     <Compile Include="Services\ProjectTaskRepository.cs" />
     <Compile Include="Services\ProjectRepository.cs" />
     <Compile Include="Services\TaskCommentRepository.cs" />
     <Compile Include="Services\UserRepository.cs" />
+    <Compile Include="Utilities.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
+    <Compile Include="Views\AddCommentPage.xaml.cs">
+      <DependentUpon>AddCommentPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\AddProjectPage.xaml.cs">
       <DependentUpon>AddProjectPage.xaml</DependentUpon>
     </Compile>
@@ -71,8 +78,17 @@
     <Compile Include="Views\FindResourcesPage.xaml.cs">
       <DependentUpon>FindResourcesPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\LoginPage.xaml.cs">
+      <DependentUpon>LoginPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\LogoutPage.xaml.cs">
+      <DependentUpon>LogoutPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MyProjectsPage.xaml.cs">
       <DependentUpon>MyProjectsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ProjectAddSuccess.xaml.cs">
+      <DependentUpon>ProjectAddSuccess.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ProjectDetailPage.xaml.cs">
       <DependentUpon>ProjectDetailPage.xaml</DependentUpon>
@@ -90,9 +106,6 @@
       <DependentUpon>RootPageMaster.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\RootPageMenuItem.cs" />
-    <Compile Include="Views\SignOutPage.xaml.cs">
-      <DependentUpon>SignOutPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\TaskDetailPage.xaml.cs">
       <DependentUpon>TaskDetailPage.xaml</DependentUpon>
     </Compile>
@@ -124,6 +137,9 @@
     </Reference>
     <Reference Include="Xamarin.Forms.Core, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Xamarin.Forms.2.3.4.231\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.Forms.Maps, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Xamarin.Forms.Maps.2.3.4.231\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10\Xamarin.Forms.Maps.dll</HintPath>
     </Reference>
     <Reference Include="Xamarin.Forms.Platform, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Xamarin.Forms.2.3.4.231\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.Platform.dll</HintPath>
@@ -173,12 +189,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Views\SignOutPage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Views\AddProjectPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
@@ -210,6 +220,30 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Views\AddTaskResourcePage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\AddCommentPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\LoginPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\LogoutPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\ProjectAddSuccess.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>

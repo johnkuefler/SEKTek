@@ -17,8 +17,14 @@ namespace ProjectTracker.Droid
 
             global::Xamarin.Forms.Forms.Init(this, bundle);
             ImageCircleRenderer.Init();
+            Xamarin.FormsMaps.Init(this, bundle);
 
             LoadApplication(new App());
+        }
+
+        public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
+        {
+            Plugin.Permissions.PermissionsImplementation.Current.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
 }

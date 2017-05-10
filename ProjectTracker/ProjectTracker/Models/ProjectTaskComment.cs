@@ -15,8 +15,6 @@ namespace ProjectTracker.Models
 
 
         private User user;
-
-
         public void LoadUser(User u)
         {
             this.user = u;

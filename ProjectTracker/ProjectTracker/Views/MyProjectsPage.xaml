@@ -9,7 +9,7 @@
 
             <ListView
                 x:Name="ProjectsListView"
-                SeparatorColor="Blue"
+                SeparatorVisibility="Default"
                 HasUnevenRows="True"
                 VerticalOptions="CenterAndExpand"
                 HorizontalOptions="CenterAndExpand"

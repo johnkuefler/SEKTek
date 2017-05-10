@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ProjectTracker.Views.AddCommentPage"
+             Title="Add Comment">
+    <ScrollView>
+        <StackLayout Padding="10">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="100"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                
+                <Label Text="Enter Comment:" FontSize="24" Grid.Row="0" Grid.Column="0"/>
+                <Image WidthRequest="50" HeightRequest="50" Source="check.png" Grid.Row="0" Grid.Column="1">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer
+                            Tapped="AddComment_Clicked"
+                            NumberOfTapsRequired="1" />
+                    </Image.GestureRecognizers>
+                </Image>
+            </Grid>
+
+            <Editor x:Name="commentEditor"
+                    VerticalOptions="FillAndExpand"
+                    HorizontalOptions="FillAndExpand"
+                    BackgroundColor="#f2f2f2">
+            </Editor>
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

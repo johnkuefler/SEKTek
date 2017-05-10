@@ -10,6 +10,17 @@
                VerticalOptions="CenterAndExpand"
                x:Name="NameEntry"
                Text="{Binding Name, Mode=TwoWay}"/>
+            <Picker x:Name="colorPicker"
+                    VerticalOptions="CenterAndExpand"
+                    SelectedIndex="1">
+                <Picker.Items>
+                    <x:String>Orange</x:String>
+                    <x:String>Green</x:String>
+                    <x:String>Blue</x:String>
+                    <x:String>Purple</x:String>
+                    <x:String>HotPink</x:String>
+                </Picker.Items>
+            </Picker>
             <Entry Placeholder="Description"
                VerticalOptions="CenterAndExpand"
                x:Name="DescriptionEntry"
@@ -36,7 +47,7 @@
                Text="{Binding Zip, Mode=TwoWay}"/>
 
             <Button Text="Save"
-                    Command="{Binding SaveProjectCommand}"/>
+                    Clicked="SaveButton_Clicked"/>
             <Button Text="Cancel"
                     Clicked="CancelButton_Clicked"/>
         </StackLayout>

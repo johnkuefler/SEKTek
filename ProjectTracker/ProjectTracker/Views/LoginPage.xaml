@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ProjectTracker.Views.LoginPage"
+             Title="LoginPage">
+    <ScrollView>
+        <StackLayout Padding="10" VerticalOptions="Center" HorizontalOptions="CenterAndExpand">
+            <Image Source="sekteklogo.png" WidthRequest="250"/>
+            <Label HorizontalTextAlignment="Center" Text="Log in" FontSize="28"/>
+            <Entry Placeholder="Username" x:Name="usernameEntry" HorizontalOptions="FillAndExpand" />
+            <Entry Placeholder="Password" x:Name="passwordEntry" HorizontalOptions="FillAndExpand" IsPassword="True"/>
+            <Button Text="Log in" Clicked="LoginButton_Clicked"/>
+            <Button Text="Forgot Password"/>
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

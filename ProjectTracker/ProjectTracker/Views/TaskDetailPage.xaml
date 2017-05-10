@@ -1,30 +1,44 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin.Abstractions"
              x:Class="ProjectTracker.Views.TaskDetailPage"
              Title="Task Details">
     <ScrollView>
-        <StackLayout Padding="10">
-            <Label Text="{Binding Name}" FontSize="24"/>
-            <Label Text="{Binding Description}"/>
-            <Label Text="{Binding DueDateDisplay}"/>
-            <Label Text="{Binding PercentCompleteDisplay}"/>
-
-
-            <Label Text="Resources" FontSize="20"/>
-            <ScrollView Orientation="Horizontal">
-                <StackLayout x:Name="ResourcesStackLayout" HeightRequest="75"
-                         Orientation="Horizontal">
+        <StackLayout>
+            <Frame BackgroundColor="{Binding ProjectColor}}">
+                <StackLayout Spacing="5" Padding="5">
+                    <Label TextColor="White" Text="{Binding Name}" FontSize="26"/>
+                    <Label TextColor="White" Text="{Binding Description}" FontSize="18"/>
+                    <Label TextColor="White" Text="{Binding DueDateDisplay}" FontSize="18"/>
+                    <Label TextColor="White" x:Name="PercentCompleteLabel" Text="{Binding PercentCompleteDisplay }" FontSize="24"/>
                 </StackLayout>
-            </ScrollView>
 
-            <Label Text="Actions" FontSize="20"/>
-            <ScrollView>
-                <StackLayout
-                Orientation="Horizontal">
-                    <Picker x:Name="PercentPicker"
-                    SelectedIndex="{Binding PercentComplete}"
-                    HorizontalOptions="CenterAndExpand">
+            </Frame>
+
+            <StackLayout Padding="10">
+                <Label Text="Resources" FontSize="20"/>
+                <ScrollView Orientation="Horizontal">
+                    <StackLayout x:Name="ResourcesStackLayout" HeightRequest="75"
+                         Orientation="Horizontal">
+                    </StackLayout>
+                </ScrollView>
+
+                <Label Text="Actions" FontSize="20"/>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Picker x:Name="PercentPicker" WidthRequest="100"
+                    HorizontalOptions="CenterAndExpand"
+                    Grid.Row="0"
+                    Grid.Column="0">
                         <Picker.Items>
                             <x:String>0%</x:String>
                             <x:String>5%</x:String>
@@ -50,17 +64,33 @@
                         </Picker.Items>
                     </Picker>
 
-                    <Button Text="+ %"
-                    Clicked="UpdatePercentButton_Clicked"></Button>
-                    <Button Text="+ C"></Button>
-                    <Button Text="+ R"
-                    Clicked="AddResource_Clicked"></Button>
-                </StackLayout>
-            </ScrollView>
+                    <Image Grid.Row="0" Grid.Column="1" WidthRequest="50" HeightRequest="50" Source="check.png">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer
+                            Tapped="UpdatePercent_Clicked"
+                            NumberOfTapsRequired="1" />
+                        </Image.GestureRecognizers>
+                    </Image>
+                    <Image Grid.Row="0" Grid.Column="2" WidthRequest="50" HeightRequest="50" Source="chat.png">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer
+                            Tapped="AddComment_Clicked"
+                            NumberOfTapsRequired="1" />
+                        </Image.GestureRecognizers>
+                    </Image>
+                    <Image x:Name="addResourceButton" Grid.Row="0" Grid.Column="3" WidthRequest="50" HeightRequest="50" Source="adduser.png">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer
+                            Tapped="AddResource_Clicked"
+                            NumberOfTapsRequired="1" />
+                        </Image.GestureRecognizers>
+                    </Image>
+                </Grid>
 
-            <Label Text="Feed" FontSize="20"/>
-            <ListView x:Name="CommentsListView"
-                SeparatorColor="Blue"
+                <Label Text="Feed" FontSize="20"/>
+                <ListView 
+                x:Name="CommentsListView"
+               SeparatorVisibility="Default"
                 HasUnevenRows="True"
                 VerticalOptions="CenterAndExpand"
                 HorizontalOptions="CenterAndExpand"
@@ -68,17 +98,52 @@
                 ItemsSource="{Binding Comments}"
                 ItemSelected="CommentsListView_ItemSelected">
 
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <StackLayout HorizontalOptions="FillAndExpand" Padding="5">
-                                <Label Text="{Binding Comment}" />
-                            </StackLayout>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Grid Padding="0,10,0,10">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="30" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="50" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
 
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*" />
+                                            <RowDefinition Height="50"/>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="50"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <controls:CircleImage 
+                                        Source="{Binding PictureURL}" 
+                                        Aspect="AspectFill"
+                                        WidthRequest="50"
+                                        HeightRequest="50"
+                                        Grid.Row="1"
+                                        Grid.Column="0">
+
+                                        </controls:CircleImage>
+
+                                    </Grid>
+
+
+                                    <Label Text="{Binding DateDisplay}" FontSize="20" Grid.Row="0" Grid.Column="1" />
+                                    <Label Text="{Binding Comment}" FontSize="20" Grid.Row="1" Grid.Column="1" />
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+            </StackLayout>
         </StackLayout>
     </ScrollView>
 </ContentPage>

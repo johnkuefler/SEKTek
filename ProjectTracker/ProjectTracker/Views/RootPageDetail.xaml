@@ -2,8 +2,52 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ProjectTracker.RootPageDetail"
-             Title="SEKTek">
-  <StackLayout Padding="10">
-    <Label Text="You haven't made any projects favorites yet. Add a project to favorites to see it on this page."/>
-  </StackLayout>
+             Title="SEK TEK">
+    <StackLayout Padding="10">
+        <Label Text="Favorite Projects" FontSize="30" />
+
+        <StackLayout VerticalOptions="CenterAndExpand"  x:Name="noFavoritesStack">
+            <Label Text="You haven't made any projects favorites yet. Add a project to favorites to see it on this page."/>
+        </StackLayout>
+
+        
+        <ListView
+            x:Name="FavoritesListView"
+                SeparatorVisibility="Default"
+                HasUnevenRows="True"
+                VerticalOptions="CenterAndExpand"
+                HorizontalOptions="CenterAndExpand"
+                ItemsSource="{Binding FavoriteProjects}"
+                ItemSelected="FavoritesListView_ItemSelected">
+
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <StackLayout>
+
+                            <Frame BackgroundColor="{Binding Color}}">
+                                <Grid ColumnSpacing="5">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="100" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <Label Text="{Binding PercentComplete}" FontSize="48" TextColor="White" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2"  />
+                                    <Label Text="{Binding Name}" FontSize="24" TextColor="White" Grid.Row="0" Grid.Column="1" />
+                                    <Label Text="{Binding Description}" FontSize="16" TextColor="White" Grid.Row="1" Grid.Column="1" />
+
+                                </Grid>
+                            </Frame>
+
+                        </StackLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+    </StackLayout>
 </ContentPage>

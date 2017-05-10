@@ -1,5 +1,5 @@
 ﻿using ProjectTracker;
-
+using ProjectTracker.Views;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -13,12 +13,20 @@ namespace ProjectTracker
             InitializeComponent();
 
             GlobalConfig.Initialize();
+
             SetMainPage();
         }
 
         public static void SetMainPage()
         {
-            Current.MainPage = new RootPage();
+            if (GlobalConfig.CurrentUser == null)
+            {
+                Current.MainPage = new LoginPage();
+            }
+            else
+            {
+                Current.MainPage = new RootPage();
+            }
         }
     }
 }

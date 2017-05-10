@@ -22,12 +22,12 @@ namespace ProjectTracker.Views
     {
         TaskDetailViewModel viewModel;
 
-        public TaskDetailPage(ProjectTask projectTask)
+        public TaskDetailPage(ProjectTask projectTask, string projectColor)
         {
-            viewModel = new TaskDetailViewModel(projectTask);
+            viewModel = new TaskDetailViewModel(projectTask, projectColor);
 
             InitializeComponent();
-            BindingContext = new TaskDetailViewModel(projectTask);
+            BindingContext = viewModel;
         }
 
         private void CommentsListView_ItemSelected(object sender, SelectedItemChangedEventArgs e)
@@ -40,10 +40,13 @@ namespace ProjectTracker.Views
         {
             base.OnAppearing();
 
-            if (viewModel.Comments.Count == 0)
+            if (GlobalConfig.CurrentUser.GetRole() != "Admin")
             {
-                viewModel.LoadProjectCommentsCommand.Execute(null);
+                addResourceButton.IsVisible = false;
             }
+
+
+            viewModel.LoadProjectCommentsCommand.Execute(null);
 
             List<User> resources = await viewModel.TaskRepository.GetAssignedResources(viewModel.TaskID);
 
@@ -53,6 +56,8 @@ namespace ProjectTracker.Views
             {
                 ResourcesStackLayout.Children.Add(new CircleImage { Source = resource.PictureURL, HeightRequest = 50, WidthRequest = 50 });
             }
+
+            PercentPicker.SelectedIndex = PercentPicker.Items.IndexOf(viewModel.PercentComplete + "%");
         }
 
         private async Task AddResource_Clicked(object sender, EventArgs e)
@@ -60,17 +65,36 @@ namespace ProjectTracker.Views
             await Navigation.PushAsync(new AddTaskResourcePage(viewModel.TaskID, viewModel.ProjectID));
         }
 
-        private async Task UpdatePercentButton_Clicked(object sender, EventArgs e)
+        private async Task UpdatePercent_Clicked(object sender, EventArgs e)
         {
+            decimal percent = Convert.ToDecimal(((string)PercentPicker.SelectedItem).Replace("%", ""));
 
+
+
+            await viewModel.UpdatePercentComplete(percent);
+
+            //ProjectTaskRepository temp = new ProjectTaskRepository();
+            //ProjectTask task = await temp.Find(viewModel.TaskID);
+            //task.PercentComplete = percent;
+
+            viewModel.PercentComplete = percent;
+
+            this.PercentCompleteLabel.Text = viewModel.PercentCompleteDisplay;
+        }
+
+
+        private async Task AddComment_Clicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new AddCommentPage(viewModel.TaskID));
         }
     }
 
-    class TaskDetailViewModel : INotifyPropertyChanged
+    public class TaskDetailViewModel : INotifyPropertyChanged
     {
         public ProjectTaskRepository TaskRepository;
         public string ProjectID { get; set; }
         public string TaskID { get; set; }
+        public string ProjectColor { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public decimal PercentComplete { get; set; }
@@ -91,10 +115,10 @@ namespace ProjectTracker.Views
         }
 
 
-        public ObservableCollection<ProjectTaskComment> Comments { get; set; }
+        public ObservableCollection<CommentListItemModel> Comments { get; set; }
         public Command LoadProjectCommentsCommand { get; set; }
 
-        public TaskDetailViewModel(ProjectTask task)
+        public TaskDetailViewModel(ProjectTask task, string projectColor)
         {
             TaskRepository = new ProjectTaskRepository();
             this.Name = task.Name;
@@ -103,19 +127,51 @@ namespace ProjectTracker.Views
             this.DueDate = task.DueDate;
             this.TaskID = task.Id;
             this.ProjectID = task.ProjectID;
-            this.Comments = new ObservableCollection<ProjectTaskComment>();
+            this.ProjectColor = projectColor;
+            this.Comments = new ObservableCollection<CommentListItemModel>();
             LoadProjectCommentsCommand = new Command(async () => await loadProjectCommentsAsync());
+        }
+
+
+        public async Task UpdatePercentComplete(decimal newPercentComplete)
+        {
+            ProjectTask task = await TaskRepository.Find(this.TaskID);
+            decimal oldPercent = task.PercentComplete;
+            this.PercentComplete = newPercentComplete;
+            task.PercentComplete = newPercentComplete;
+
+           //await TaskRepository.Update(task);
+
+            await TaskRepository.AddTaskComment(GlobalConfig.CurrentUser.Id, this.TaskID, "Updated from " + oldPercent + "% to " + newPercentComplete + "% complete");
+
+            LoadProjectCommentsCommand.Execute(null);
         }
 
         private async Task loadProjectCommentsAsync()
         {
-            this.Comments = new ObservableCollection<ProjectTaskComment>(await TaskRepository.GetComments(TaskID));
+            this.Comments.Clear();
+            IEnumerable<ProjectTaskComment> comments = await TaskRepository.GetComments(this.TaskID);
+            foreach (ProjectTaskComment comment in comments.OrderByDescending(x => x.DateTime))
+            {
+                this.Comments.Add(new CommentListItemModel
+                {
+                    Comment = comment.Comment,
+                    PictureURL = comment.GetUser().PictureURL,
+                    DateDisplay = comment.DateTime.ToString()
+                });
+            }
         }
 
 
         public event PropertyChangedEventHandler PropertyChanged;
         void OnPropertyChanged([CallerMemberName]string propertyName = "") =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
 
+    public class CommentListItemModel
+    {
+        public string PictureURL { get; set; }
+        public string Comment { get; set; }
+        public string DateDisplay { get; set; }
     }
 }
